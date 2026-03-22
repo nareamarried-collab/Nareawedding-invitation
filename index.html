@@ -101,7 +101,7 @@
     </div>
 
     <!-- Musik Background -->
-<audio id="bg-music" loop preload="auto">
+    <audio id="bg-music" loop preload="auto">
         <source src="https://s3.ustatik.com/audio.com.audio/source/58/73/1860169892947358-1860169893017063.mp3?response-content-disposition=attachment%3B%20filename%3D%22Terbuang%20Dalam%20Waktu%20-%20Barasuara%20%28Peaceful%20Piano%29%20%281%29.mp3%22&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=F0E8U41NBMMW3Y027UTJ%2F20260320%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260320T084524Z&X-Amz-SignedHeaders=host&X-Amz-Expires=518400&X-Amz-Signature=bba9705abde946af53ee9c2cd8f25c953112c5d48dc4fa54a43734f71d501ced" type="audio/mpeg">
     </audio>
 
@@ -184,8 +184,7 @@
         <!-- COUPLE -->
         <section id="couple" class="p-8 text-center bg-white py-24">
             <div class="reveal fade-up">
-                <p data-t="mempelai" class="text-[10px] tracking-[0.4em] mb-4 uppercase font-semibold text-[#a89985]">Mempelai</p>
-                <h2 class="text-3xl font-serif italic text-[#6b5841] mb-16">Groom & Bride</h2>
+                <h2 data-t="mempelai" class="text-3xl font-serif italic text-[#6b5841] mb-16">Groom & Bride</h2>
             </div>
             
             <div class="flex flex-col items-center gap-10">
@@ -194,7 +193,10 @@
                         <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Bride Image">
                     </div>
                     <h3 class="text-[2.5rem] leading-[1.2] font-signature text-[#4a4238] mb-4 px-2">Arsya Rinaya Sofyan</h3>
-                    <p class="text-xs text-[#8c7355] italic"><span data-t="daughterOf">Putri dari</span> <br>Bpk. Adi Sofian & Ibu Roskomala Sari</p>
+                    <p class="text-xs text-[#8c7355] italic">
+                        <span data-t="daughterOf">Putri dari</span> <br>
+                        <span data-t="parentArsya">Bpk. Adi Sofian & Ibu Roskomala Sari</span>
+                    </p>
                 </div>
 
                 <div class="text-6xl font-signature text-[#d4c1ac] reveal">&</div>
@@ -204,7 +206,10 @@
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Groom Image">
                     </div>
                     <h3 class="text-5xl font-signature text-[#4a4238] mb-4">Andrea</h3>
-                    <p class="text-xs text-[#8c7355] italic"><span data-t="sonOf">Putra dari</span> <br>Bpk. Lukman (Alm) & Ibu Isma Delfi</p>
+                    <p class="text-xs text-[#8c7355] italic">
+                        <span data-t="sonOf">Putra dari</span> <br>
+                        <span data-t="parentAndrea">Bpk. Lukman (Alm) & Ibu Isma Delfi</span>
+                    </p>
                 </div>
             </div>
         </section>
@@ -219,7 +224,7 @@
                 </div>
                 <div class="bg-white/5 border border-white/10 rounded-[2rem] p-6">
                     <p data-t="reception" class="text-sm uppercase tracking-widest text-[#d4c1ac] mb-4">Resepsi</p>
-                    <p class="text-lg font-serif mb-4">19:00 WIB - Selesai</p>
+                    <p class="text-lg font-serif mb-4"><span data-t="receptionTime">19:00 WIB - Selesai</span></p>
                     <div class="w-10 h-[1px] bg-white/20 mx-auto my-4"></div>
                     <p class="text-xl font-serif italic mb-2">Radioclinique</p>
                     <p class="text-[11px] opacity-80 mb-6">Gg. H. Maung No.27, Ciputat, <br>Kota Tangerang Selatan</p>
@@ -291,7 +296,7 @@
 
                 <!-- REAL-TIME QR BOX -->
                 <div id="qr-display-box" class="mt-8 p-6 bg-[#fcfbf9] border border-[#e5dfd3] rounded-[2.5rem] hidden opacity-0 transition-all duration-700">
-                    <p class="text-[10px] font-bold text-[#a89985] mb-4 uppercase tracking-widest">QR Check-in Anda</p>
+                    <p data-t="qrTitle" class="text-[10px] font-bold text-[#a89985] mb-4 uppercase tracking-widest">QR Check-in Anda</p>
                     <div class="bg-white p-3 rounded-2xl inline-block shadow-sm mb-4">
                         <img id="qr-image-result" src="" alt="QR Code" class="w-44 h-44 object-contain">
                     </div>
@@ -308,7 +313,7 @@
                 <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">Doa & Ucapan Teman & Keluarga.</p>
 
                 <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
-                    <!-- Data will be loaded -->
+                    <!-- Data wishes will appear here -->
                 </div>
             </div>
         </section>
@@ -318,7 +323,7 @@
             <h2 class="text-4xl font-signature text-[#6b5841] mb-1">Andrea & Arsya</h2>
             <p class="text-[10px] uppercase tracking-[0.3em] text-[#a89985] mb-8">05 . 04 . 2026</p>
             <div class="space-y-1">
-                <p class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
+                <p data-t="createdBy" class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
                 <p class="text-[2.5rem] font-signature text-[#8c7355]">Narea</p>
             </div>
         </footer>
@@ -337,19 +342,19 @@
                     <p class="text-[9px] font-bold text-[#a89985] uppercase mb-2 tracking-widest">Bank Transfer (BCA)</p>
                     <p class="text-xl font-serif font-bold text-[#4a4238] mb-1">1010013723992</p>
                     <p class="text-[11px] text-[#8c7355] mb-4">A.N ANDREA</p>
-                    <button onclick="copyToClipboard('1010013723992')" class="w-full bg-[#8c7355] text-white py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Rekening</button>
+                    <button data-t="copyAccountBtn" onclick="copyToClipboard('1010013723992')" class="w-full bg-[#8c7355] text-white py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Rekening</button>
                 </div>
                 <div class="bg-[#fcfbf9] border border-[#e5dfd3] p-5 rounded-3xl text-center">
                     <p data-t="shippingAddress" class="text-[9px] font-bold text-[#a89985] uppercase mb-3 tracking-widest text-center">Alamat Pengiriman</p>
                     <p class="text-[10px] text-[#8c7355] leading-relaxed mb-4">Komplek Arya Graha, Blok J No. 5, Jl. Aria Putra, Kedaung, Kec. Pamulang, Kota Tangerang Selatan, Banten 15415</p>
-                    <button onclick="copyToClipboard('Komplek Arya Graha, Blok J No. 5, Jl. Aria Putra, Kedaung, Kec. Pamulang, Kota Tangerang Selatan, Banten 15415')" class="w-full border-2 border-[#8c7355] text-[#8c7355] py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Alamat</button>
+                    <button data-t="copyAddressBtn" onclick="copyToClipboard('Komplek Arya Graha, Blok J No. 5, Jl. Aria Putra, Kedaung, Kec. Pamulang, Kota Tangerang Selatan, Banten 15415')" class="w-full border-2 border-[#8c7355] text-[#8c7355] py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Alamat</button>
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-    // --- DICTIONARY ---
+    // --- DICTIONARY (CENTRALIZED BILINGUAL SYSTEM) ---
     const i18n = {
         id: {
             theWeddingOf: "The Wedding Of",
@@ -361,8 +366,21 @@
             navWishes: "Ucapan",
             weAreMarried: "Kami Menikah",
             saveDateBtn: "Simpan Jadwal",
+            mempelai: "Mempelai",
+            daughterOf: "Putri dari",
+            parentArsya: "Bpk. Adi Sofian & Ibu Roskomala Sari",
+            sonOf: "Putra dari",
+            parentAndrea: "Bpk. Lukman (Alm) & Ibu Isma Delfi",
+            eventInfo: "Informasi Acara",
+            sunday: "Minggu",
+            fullDate: "April 05, 2026",
+            reception: "Resepsi",
+            receptionTime: "19:00 WIB - Selesai",
             weddingGift: "Wedding Gift",
             giftNote: "Terima kasih atas tanda kasih Anda untuk kami.",
+            sendGiftBtn: "Kirim Hadiah",
+            copyAccountBtn: "Salin Rekening",
+            copyAddressBtn: "Salin Alamat",
             shippingAddress: "Alamat Pengiriman",
             rsvpTitle: "Konfirmasi Kehadiran",
             rsvpNote: "Silakan isi formulir di bawah ini.",
@@ -374,9 +392,11 @@
             optNotAttending: "Tidak Hadir",
             submitBtn: "Kirim Konfirmasi",
             showQrBtn: "Tampilkan QR Check-in",
+            qrTitle: "QR Check-in Anda",
+            qrInstruction: "Simpan QR ini untuk masuk ke venue acara.",
             wishesTitle: "Buku Tamu",
             wishesNote: "Doa & Ucapan Teman & Keluarga.",
-            qrInstruction: "Simpan QR ini untuk masuk ke venue acara.",
+            createdBy: "Created By",
             msgSuccess: "Konfirmasi Berhasil!",
             msgError: "Gagal mengirim data.",
             msgCopied: "Berhasil disalin!"
@@ -389,12 +409,25 @@
             navEvent: "Event",
             navGallery: "Gallery",
             navWishes: "Wishes",
-            weAreMarried: "We Are Married",
+            weAreMarried: "We Are Getting Married",
             saveDateBtn: "Save the Date",
+            mempelai: "Bride & Groom",
+            daughterOf: "Daughter of",
+            parentArsya: "Mr. Adi Sofian & Mrs. Roskomala Sari",
+            sonOf: "Son of",
+            parentAndrea: "Mr. Lukman (dec) & Mrs. Isma Delfi",
+            eventInfo: "Event Information",
+            sunday: "Sunday",
+            fullDate: "April 05th, 2026",
+            reception: "Reception",
+            receptionTime: "07:00 PM - Finished",
             weddingGift: "Wedding Gift",
             giftNote: "Thank you for your kindness towards us.",
+            sendGiftBtn: "Send Gift",
+            copyAccountBtn: "Copy Account",
+            copyAddressBtn: "Copy Address",
             shippingAddress: "Shipping Address",
-            rsvpTitle: "RSVP",
+            rsvpTitle: "RSVP Confirmation",
             rsvpNote: "Please fill out the form below.",
             labelName: "Name",
             labelStatus: "Attendance",
@@ -404,9 +437,11 @@
             optNotAttending: "Declining",
             submitBtn: "Submit RSVP",
             showQrBtn: "Show QR Check-in",
+            qrTitle: "Your Check-in QR",
+            qrInstruction: "Save this QR for venue check-in.",
             wishesTitle: "Guest Book",
             wishesNote: "Prayers & Wishes from Friends & Family.",
-            qrInstruction: "Save this QR for venue check-in.",
+            createdBy: "Created By",
             msgSuccess: "RSVP Submitted!",
             msgError: "Failed to send data.",
             msgCopied: "Copied!"
@@ -415,17 +450,35 @@
 
     let currentLang = 'id';
     
-    // URL Web App Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmuqQl5TigRjji3qKxKOzhIww04ogX3EVPv-4hzIFoMHUTKS8x9RNM1RytWXwSgn-F/exec";
 
     function changeLang(lang) {
         currentLang = lang;
+        // Centralized Replacement Logic
         document.querySelectorAll('[data-t]').forEach(el => {
             const key = el.getAttribute('data-t');
-            if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            if (i18n[lang][key]) {
+                // If it's a select option, update the text properly
+                if (el.tagName === 'OPTION') {
+                    el.text = i18n[lang][key];
+                } else {
+                    el.innerText = i18n[lang][key];
+                }
+            }
         });
+
+        // Specific Button Updates if text is outside data-t (fallback)
+        const submitBtnText = document.getElementById('btn-text');
+        if (submitBtnText && !submitBtnText.innerText.includes('✓')) {
+            submitBtnText.innerText = i18n[lang].submitBtn;
+        }
+
+        // Toggle Active Classes
         document.getElementById('btn-id').classList.toggle('active', lang === 'id');
         document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+        
+        // Refresh RSVP placeholder if needed
+        document.getElementById('form-name').placeholder = "...";
     }
 
     const bgMusic = document.getElementById('bg-music');
@@ -479,7 +532,6 @@
         showToast(i18n[currentLang].msgCopied);
     }
 
-    // --- LOGIKA FORM RSVP ---
     const rsvpForm = document.getElementById('rsvp-form');
     const statusField = document.getElementById('form-status');
     const guestsWrapper = document.getElementById('guests-wrapper');
@@ -510,9 +562,7 @@
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'cors',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payload)
             });
 
@@ -520,14 +570,9 @@
 
             if (result.status === "success" || result.result === "success") {
                 showToast(i18n[currentLang].msgSuccess);
-                
-                // Ambil GuestID dari respons server
                 const guestId = result.guestId || result.GuestID || "CONFIRMED";
-                
-                // Generate URL QR Code secara dinamis menggunakan api.qrserver.com
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${guestId}`;
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(guestId)}`;
 
-                // Tampilkan hasil ke UI
                 document.getElementById('qr-image-result').src = qrUrl;
                 document.getElementById('guest-id-result').innerText = guestId;
                 
@@ -554,10 +599,9 @@
                 btnText.innerText = "✓";
                 btnLoader.classList.add('hidden');
             } else {
-                throw new Error(result.message || "Gagal menyimpan data.");
+                throw new Error(result.message || "Error");
             }
         } catch (error) {
-            console.error("Submission Error:", error);
             showToast(i18n[currentLang].msgError);
             submitBtn.disabled = false;
             btnText.innerText = i18n[currentLang].submitBtn;
