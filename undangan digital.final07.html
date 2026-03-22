@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Andrea & Arsya</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Parisienne&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            scroll-behavior: smooth;
+            background-color: #f2eee9;
+            overflow-x: hidden;
+            text-rendering: optimizeSpeed;
+        }
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .font-signature { font-family: 'Parisienne', cursive; font-weight: normal; }
+        
+        .cover-hidden { transform: translate3d(0, -100%, 0); pointer-events: none; }
+
+        .bar { width: 3px; background: #8c7355; margin: 0 1px; display: inline-block; border-radius: 2px;}
+        .playing .bar { animation: bounce 1s infinite alternate; }
+        .playing .bar:nth-child(2) { animation-delay: 0.2s; }
+        .playing .bar:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0% { height: 4px; } 100% { height: 16px; } }
+
+        #main-content { display: none; opacity: 0; transition: opacity 0.6s ease-in; padding-bottom: 100px; }
+        
+        .reveal { opacity: 0; transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.fade-up { transform: translateY(50px); }
+        .reveal.active { opacity: 1; transform: translate(0) scale(1); }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #8c7355;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 10px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 100px;
+            transform: translateX(-50%);
+            font-size: 11px;
+            transition: 0.5s;
+            opacity: 0;
+        }
+        #toast.show { visibility: visible; opacity: 1; }
+
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 160;
+            background: white;
+            padding: 4px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 4px;
+        }
+        .lang-btn {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        .lang-btn.active { background: #8c7355; color: white; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d4c1ac; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-[#4a4238] antialiased">
+
+    <!-- LANGUAGE TOGGLE -->
+    <div class="lang-toggle">
+        <button onclick="changeLang('id')" id="btn-id" class="lang-btn active">ID</button>
+        <button onclick="changeLang('en')" id="btn-en" class="lang-btn">EN</button>
+    </div>
+
+    <!-- Musik Background -->
+<audio id="bg-music" loop preload="auto">
+        <source src="https://s3.ustatik.com/audio.com.audio/source/58/73/1860169892947358-1860169893017063.mp3?response-content-disposition=attachment%3B%20filename%3D%22Terbuang%20Dalam%20Waktu%20-%20Barasuara%20%28Peaceful%20Piano%29%20%281%29.mp3%22&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=F0E8U41NBMMW3Y027UTJ%2F20260320%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20260320T084524Z&X-Amz-SignedHeaders=host&X-Amz-Expires=518400&X-Amz-Signature=bba9705abde946af53ee9c2cd8f25c953112c5d48dc4fa54a43734f71d501ced" type="audio/mpeg">
+    </audio>
+
+    <!-- COVER -->
+    <div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-stone-800 text-white text-center px-6 transition-transform duration-700 ease-in-out" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200'); background-size: cover; background-position: center;">
+        <div class="w-full max-w-md">
+            <p data-t="theWeddingOf" class="text-[10px] tracking-[0.6em] mb-4 uppercase opacity-80 font-semibold">The Wedding Of</p>
+            <h1 class="text-6xl md:text-7xl font-signature mb-10 text-white shadow-sm">Andrea & Arsya</h1>
+            <div class="mb-14">
+                <p data-t="toDear" class="text-[10px] uppercase tracking-[0.4em] mb-4 opacity-70 italic text-stone-300">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+                <div class="bg-white/10 backdrop-blur-md inline-block px-10 py-4 rounded-full border border-white/20">
+                    <p class="text-xl font-light italic font-serif" id="guest-name-cover">Tamu Undangan</p>
+                </div>
+            </div>
+            <button onclick="openInvitation()" class="bg-[#8c7355] hover:bg-[#6b5841] text-white px-12 py-4 rounded-full font-medium tracking-widest transition-all shadow-xl uppercase text-[10px] active:scale-95 flex items-center justify-center gap-2 mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <span data-t="openInvitationBtn">Buka Undangan</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="max-w-md mx-auto bg-white shadow-2xl min-h-screen relative border-x border-[#dcd4c8]">
+        
+        <!-- NAVIGASI BAWAH -->
+        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] w-[90%] max-w-[360px]">
+            <nav class="bg-white/80 backdrop-blur-xl border border-white/40 rounded-full px-4 py-3 flex justify-between items-center shadow-2xl">
+                <a href="#home" class="flex flex-col items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8c7355" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span class="text-[8px] uppercase tracking-tighter font-bold text-[#8c7355]">Home</span>
+                </a>
+                <a href="#couple" class="flex flex-col items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8c7355" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    <span data-t="navCouple" class="text-[8px] uppercase tracking-tighter font-bold text-[#8c7355]">Couple</span>
+                </a>
+                <a href="#event" class="flex flex-col items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8c7355" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    <span data-t="navEvent" class="text-[8px] uppercase tracking-tighter font-bold text-[#8c7355]">Event</span>
+                </a>
+                <a href="#gallery" class="flex flex-col items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8c7355" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                    <span data-t="navGallery" class="text-[8px] uppercase tracking-tighter font-bold text-[#8c7355]">Gallery</span>
+                </a>
+                <a href="#wishes" class="flex flex-col items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8c7355" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6-4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    <span data-t="navWishes" class="text-[8px] uppercase tracking-tighter font-bold text-[#8c7355]">Wishes</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Tombol Musik -->
+        <button id="music-toggle" onclick="toggleMusic()" class="fixed top-6 right-6 md:right-[calc(50%-12rem)] z-[150] bg-white/90 backdrop-blur p-3 rounded-full shadow-xl flex items-center justify-center w-11 h-11 border border-[#f2eee9]">
+            <div id="visualizer" class="flex items-end justify-center h-4">
+                <div class="bar h-2"></div><div class="bar h-2"></div><div class="bar h-2"></div>
+            </div>
+        </button>
+
+        <!-- HERO -->
+        <section id="home" class="p-4 bg-[#f2eee9] pt-6">
+            <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-[#e5dfd3] reveal fade-up">
+                <div class="aspect-[4/5] relative overflow-hidden bg-black">
+                    <video id="prewed-video" loop muted playsinline preload="auto" class="w-full h-full object-cover">
+                        <source src="https://e-invitation.pecatudesign.com/uploads/client-assets/shaviraraoul/motions.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
+                </div>
+                <div class="text-center px-6 pb-12 -mt-16 relative z-10 reveal fade-up">
+                    <p data-t="weAreMarried" class="text-[10px] tracking-[0.4em] mb-4 uppercase font-semibold text-[#a89985]">We Are Getting Married</p>
+                    <h2 class="text-6xl font-signature text-[#6b5841] mb-2">Andrea & Arsya</h2>
+                    <div class="w-12 h-[1px] bg-[#d4c1ac] mx-auto my-6"></div>
+                    <p class="tracking-[0.3em] text-[12px] uppercase font-bold text-[#8c7355] mb-6">05 . 04 . 26</p>
+                    <button onclick="window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+of+Andrea+%26+Arsya&dates=20260405T120000Z/20260405T160000Z','_blank')" class="inline-flex items-center justify-center gap-2 bg-[#8c7355] text-white px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition shadow-md hover:scale-105 active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        <span data-t="saveDateBtn">Simpan Jadwal</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- COUPLE -->
+        <section id="couple" class="p-8 text-center bg-white py-24">
+            <div class="reveal fade-up">
+                <p data-t="mempelai" class="text-[10px] tracking-[0.4em] mb-4 uppercase font-semibold text-[#a89985]">Mempelai</p>
+                <h2 class="text-3xl font-serif italic text-[#6b5841] mb-16">Groom & Bride</h2>
+            </div>
+            
+            <div class="flex flex-col items-center gap-10">
+                <div class="w-full max-w-sm reveal fade-up">
+                    <div class="w-56 h-56 mx-auto rounded-full overflow-hidden mb-6 border-4 border-[#f2eee9] shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Bride Image">
+                    </div>
+                    <h3 class="text-[2.5rem] leading-[1.2] font-signature text-[#4a4238] mb-4 px-2">Arsya Rinaya Sofyan</h3>
+                    <p class="text-xs text-[#8c7355] italic"><span data-t="daughterOf">Putri dari</span> <br>Bpk. Adi Sofian & Ibu Roskomala Sari</p>
+                </div>
+
+                <div class="text-6xl font-signature text-[#d4c1ac] reveal">&</div>
+
+                <div class="w-full max-w-sm reveal fade-up">
+                    <div class="w-56 h-56 mx-auto rounded-full overflow-hidden mb-6 border-4 border-[#f2eee9] shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Groom Image">
+                    </div>
+                    <h3 class="text-5xl font-signature text-[#4a4238] mb-4">Andrea</h3>
+                    <p class="text-xs text-[#8c7355] italic"><span data-t="sonOf">Putra dari</span> <br>Bpk. Lukman (Alm) & Ibu Isma Delfi</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENT -->
+        <section id="event" class="p-6 bg-[#f2eee9] py-16">
+            <div class="bg-[#4a4238] text-white rounded-[2.5rem] p-8 text-center shadow-xl reveal fade-up">
+                <h3 data-t="eventInfo" class="text-3xl font-serif italic mb-10 text-[#f2eee9]">Informasi Acara</h3>
+                <div class="mb-8">
+                    <p data-t="sunday" class="text-[#d4c1ac] text-[11px] uppercase tracking-[0.3em] font-bold mb-2">Minggu</p>
+                    <p data-t="fullDate" class="text-2xl font-serif">April 05, 2026</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-[2rem] p-6">
+                    <p data-t="reception" class="text-sm uppercase tracking-widest text-[#d4c1ac] mb-4">Resepsi</p>
+                    <p class="text-lg font-serif mb-4">19:00 WIB - Selesai</p>
+                    <div class="w-10 h-[1px] bg-white/20 mx-auto my-4"></div>
+                    <p class="text-xl font-serif italic mb-2">Radioclinique</p>
+                    <p class="text-[11px] opacity-80 mb-6">Gg. H. Maung No.27, Ciputat, <br>Kota Tangerang Selatan</p>
+                    <a href="https://maps.app.goo.gl/zbrKD1EGRyC1TYHy7" target="_blank" class="inline-flex bg-[#8c7355] text-white px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest">Google Maps</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- GIFT -->
+        <section id="gift" class="p-8 bg-white py-16 text-center">
+            <div class="reveal fade-up bg-[#fcfbf9] p-8 rounded-[2.5rem] shadow-sm border border-[#e5dfd3]">
+                <h3 data-t="weddingGift" class="text-3xl font-serif italic text-[#6b5841] mb-4">Wedding Gift</h3>
+                <p data-t="giftNote" class="text-[11px] text-[#8c7355] mb-8 leading-relaxed">Terima kasih atas tanda kasih Anda untuk kami.</p>
+                
+                <button onclick="openGiftModal()" class="inline-flex items-center gap-2 bg-[#8c7355] text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg w-full justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span data-t="sendGiftBtn">Kirim Hadiah</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- RSVP -->
+        <section id="rsvp" class="p-8 bg-[#f2eee9] py-16 text-center">
+            <div class="reveal fade-up bg-white p-8 rounded-[2.5rem] shadow-sm border border-[#e5dfd3]">
+                <h3 data-t="rsvpTitle" class="text-3xl font-serif italic text-[#6b5841] mb-4">Konfirmasi Kehadiran</h3>
+                <p data-t="rsvpNote" class="text-[11px] text-[#8c7355] mb-8 leading-relaxed">Silakan isi formulir di bawah ini.</p>
+                
+                <form id="rsvp-form" class="space-y-4 text-left">
+                    <div>
+                        <label data-t="labelName" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Nama</label>
+                        <input type="text" id="form-name" required placeholder="..." class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none focus:ring-1 focus:ring-[#8c7355]">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label data-t="labelStatus" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Kehadiran</label>
+                            <select id="form-status" class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none">
+                                <option value="Hadir" data-t="optAttending">Hadir</option>
+                                <option value="Tidak Hadir" data-t="optNotAttending">Tidak Hadir</option>
+                            </select>
+                        </div>
+                        <div id="guests-wrapper">
+                            <label data-t="labelGuests" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Jumlah Tamu</label>
+                            <select id="form-guests" class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label data-t="labelWish" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Ucapan / Doa</label>
+                        <textarea id="form-wish" rows="3" class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none resize-none focus:ring-1 focus:ring-[#8c7355]"></textarea>
+                    </div>
+
+                    <button type="submit" id="btn-submit" class="w-full bg-[#8c7355] text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2">
+                        <span id="btn-text" data-t="submitBtn">Kirim Konfirmasi</span>
+                        <div id="btn-loader" class="hidden animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                    </button>
+                    
+                    <!-- TOMBOL SHOW QR (Hanya Muncul Jika Sudah Pernah Submit) -->
+                    <button type="button" id="btn-show-qr" class="hidden w-full border border-[#8c7355] text-[#8c7355] py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest mt-2">
+                        <span data-t="showQrBtn">Tampilkan QR Check-in</span>
+                    </button>
+                </form>
+
+                <!-- REAL-TIME QR BOX -->
+                <div id="qr-display-box" class="mt-8 p-6 bg-[#fcfbf9] border border-[#e5dfd3] rounded-[2.5rem] hidden opacity-0 transition-all duration-700">
+                    <p class="text-[10px] font-bold text-[#a89985] mb-4 uppercase tracking-widest">QR Check-in Anda</p>
+                    <div class="bg-white p-3 rounded-2xl inline-block shadow-sm mb-4">
+                        <img id="qr-image-result" src="" alt="QR Code" class="w-44 h-44 object-contain">
+                    </div>
+                    <p id="guest-id-result" class="text-[11px] font-mono font-bold text-[#4a4238] tracking-widest uppercase"></p>
+                    <p data-t="qrInstruction" class="text-[10px] text-gray-400 mt-2 px-4 italic leading-relaxed">Simpan QR ini untuk masuk ke venue acara.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WISHES LIST -->
+        <section id="wishes" class="p-8 bg-white py-16 text-center">
+            <div class="bg-[#fcfbf9] rounded-[2.5rem] p-8 shadow-sm border border-[#e5dfd3] reveal fade-up">
+                <h3 data-t="wishesTitle" class="text-3xl font-serif italic text-[#6b5841] mb-2">Buku Tamu</h3>
+                <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">Doa & Ucapan Teman & Keluarga.</p>
+
+                <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
+                    <!-- Data will be loaded -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-white py-12 px-8 text-center border-t border-[#f2eee9]">
+            <h2 class="text-4xl font-signature text-[#6b5841] mb-1">Andrea & Arsya</h2>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-[#a89985] mb-8">05 . 04 . 2026</p>
+            <div class="space-y-1">
+                <p class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
+                <p class="text-[2.5rem] font-signature text-[#8c7355]">Narea</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- TOAST -->
+    <div id="toast">Berhasil!</div>
+
+    <!-- GIFT MODAL -->
+    <div id="gift-modal" class="modal-overlay" onclick="closeGiftModal()">
+        <div class="bg-white p-6 rounded-[2.5rem] w-[90%] max-w-[400px] shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeGiftModal()" class="absolute top-6 right-6 text-gray-400">✕</button>
+            <h4 data-t="weddingGift" class="font-serif italic text-2xl text-[#6b5841] mb-6 text-center">Wedding Gift</h4>
+            <div class="space-y-5">
+                <div class="bg-[#fcfbf9] border border-[#e5dfd3] p-5 rounded-3xl text-center">
+                    <p class="text-[9px] font-bold text-[#a89985] uppercase mb-2 tracking-widest">Bank Transfer (BCA)</p>
+                    <p class="text-xl font-serif font-bold text-[#4a4238] mb-1">1010013723992</p>
+                    <p class="text-[11px] text-[#8c7355] mb-4">A.N ANDREA</p>
+                    <button onclick="copyToClipboard('1010013723992')" class="w-full bg-[#8c7355] text-white py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Rekening</button>
+                </div>
+                <div class="bg-[#fcfbf9] border border-[#e5dfd3] p-5 rounded-3xl text-center">
+                    <p data-t="shippingAddress" class="text-[9px] font-bold text-[#a89985] uppercase mb-3 tracking-widest text-center">Alamat Pengiriman</p>
+                    <p class="text-[10px] text-[#8c7355] leading-relaxed mb-4">Komplek Arya Graha, Blok J No. 5, Jl. Aria Putra, Kedaung, Kec. Pamulang, Kota Tangerang Selatan, Banten 15415</p>
+                    <button onclick="copyToClipboard('Komplek Arya Graha, Blok J No. 5, Jl. Aria Putra, Kedaung, Kec. Pamulang, Kota Tangerang Selatan, Banten 15415')" class="w-full border-2 border-[#8c7355] text-[#8c7355] py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest">Salin Alamat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- DICTIONARY ---
+    const i18n = {
+        id: {
+            theWeddingOf: "The Wedding Of",
+            toDear: "Kepada Yth. Bapak/Ibu/Saudara/i",
+            openInvitationBtn: "Buka Undangan",
+            navCouple: "Mempelai",
+            navEvent: "Acara",
+            navGallery: "Galeri",
+            navWishes: "Ucapan",
+            weAreMarried: "Kami Menikah",
+            saveDateBtn: "Simpan Jadwal",
+            weddingGift: "Wedding Gift",
+            giftNote: "Terima kasih atas tanda kasih Anda untuk kami.",
+            shippingAddress: "Alamat Pengiriman",
+            rsvpTitle: "Konfirmasi Kehadiran",
+            rsvpNote: "Silakan isi formulir di bawah ini.",
+            labelName: "Nama",
+            labelStatus: "Kehadiran",
+            labelGuests: "Jumlah Tamu",
+            labelWish: "Ucapan / Doa",
+            optAttending: "Hadir",
+            optNotAttending: "Tidak Hadir",
+            submitBtn: "Kirim Konfirmasi",
+            showQrBtn: "Tampilkan QR Check-in",
+            wishesTitle: "Buku Tamu",
+            wishesNote: "Doa & Ucapan Teman & Keluarga.",
+            qrInstruction: "Simpan QR ini untuk masuk ke venue acara.",
+            msgSuccess: "Konfirmasi Berhasil!",
+            msgError: "Gagal mengirim data.",
+            msgCopied: "Berhasil disalin!"
+        },
+        en: {
+            theWeddingOf: "The Wedding Of",
+            toDear: "To Dear Mr/Mrs/Ms",
+            openInvitationBtn: "Open Invitation",
+            navCouple: "Couple",
+            navEvent: "Event",
+            navGallery: "Gallery",
+            navWishes: "Wishes",
+            weAreMarried: "We Are Married",
+            saveDateBtn: "Save the Date",
+            weddingGift: "Wedding Gift",
+            giftNote: "Thank you for your kindness towards us.",
+            shippingAddress: "Shipping Address",
+            rsvpTitle: "RSVP",
+            rsvpNote: "Please fill out the form below.",
+            labelName: "Name",
+            labelStatus: "Attendance",
+            labelGuests: "Number of Guests",
+            labelWish: "Wishes / Prayers",
+            optAttending: "Attending",
+            optNotAttending: "Declining",
+            submitBtn: "Submit RSVP",
+            showQrBtn: "Show QR Check-in",
+            wishesTitle: "Guest Book",
+            wishesNote: "Prayers & Wishes from Friends & Family.",
+            qrInstruction: "Save this QR for venue check-in.",
+            msgSuccess: "RSVP Submitted!",
+            msgError: "Failed to send data.",
+            msgCopied: "Copied!"
+        }
+    };
+
+    let currentLang = 'id';
+    
+    // URL Web App Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmuqQl5TigRjji3qKxKOzhIww04ogX3EVPv-4hzIFoMHUTKS8x9RNM1RytWXwSgn-F/exec";
+
+    function changeLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-t]').forEach(el => {
+            const key = el.getAttribute('data-t');
+            if (i18n[lang][key]) el.innerText = i18n[lang][key];
+        });
+        document.getElementById('btn-id').classList.toggle('active', lang === 'id');
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+
+    const bgMusic = document.getElementById('bg-music');
+    const video = document.getElementById('prewed-video');
+    const toast = document.getElementById("toast");
+
+    let isPlaying = false;
+
+    function openInvitation() {
+        document.getElementById('cover').classList.add('cover-hidden');
+        document.getElementById('main-content').style.display = 'block';
+        bgMusic.play().then(() => { 
+            isPlaying = true; 
+            document.getElementById('visualizer').classList.add('playing'); 
+        }).catch(() => {});
+        setTimeout(() => { 
+            document.getElementById('main-content').style.opacity = '1'; 
+            video.play().catch(() => {}); 
+            initReveal(); 
+        }, 300);
+        window.scrollTo(0, 0);
+    }
+
+    function toggleMusic() {
+        if (isPlaying) { 
+            bgMusic.pause(); 
+            document.getElementById('visualizer').classList.remove('playing'); 
+        } else { 
+            bgMusic.play().catch(() => {}); 
+            document.getElementById('visualizer').classList.add('playing'); 
+        }
+        isPlaying = !isPlaying;
+    }
+
+    function openGiftModal() { document.getElementById('gift-modal').style.display = 'flex'; }
+    function closeGiftModal() { document.getElementById('gift-modal').style.display = 'none'; }
+
+    function showToast(message) {
+        toast.innerText = message;
+        toast.className = "show";
+        setTimeout(() => { toast.className = ""; }, 3000);
+    }
+
+    function copyToClipboard(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showToast(i18n[currentLang].msgCopied);
+    }
+
+    // --- LOGIKA FORM RSVP ---
+    const rsvpForm = document.getElementById('rsvp-form');
+    const statusField = document.getElementById('form-status');
+    const guestsWrapper = document.getElementById('guests-wrapper');
+    const submitBtn = document.getElementById('btn-submit');
+    const btnText = document.getElementById('btn-text');
+    const btnLoader = document.getElementById('btn-loader');
+    const qrDisplayBox = document.getElementById('qr-display-box');
+
+    statusField.addEventListener('change', () => {
+        guestsWrapper.style.opacity = statusField.value === 'Tidak Hadir' ? '0.3' : '1';
+    });
+
+    rsvpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        submitBtn.disabled = true;
+        btnText.innerText = "...";
+        btnLoader.classList.remove('hidden');
+
+        const payload = {
+            name: document.getElementById('form-name').value.trim(),
+            status: document.getElementById('form-status').value,
+            guests: document.getElementById('form-status').value === 'Hadir' ? document.getElementById('form-guests').value : 0,
+            wish: document.getElementById('form-wish').value.trim()
+        };
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success" || result.result === "success") {
+                showToast(i18n[currentLang].msgSuccess);
+                
+                // Ambil GuestID dari respons server
+                const guestId = result.guestId || result.GuestID || "CONFIRMED";
+                
+                // Generate URL QR Code secara dinamis menggunakan api.qrserver.com
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${guestId}`;
+
+                // Tampilkan hasil ke UI
+                document.getElementById('qr-image-result').src = qrUrl;
+                document.getElementById('guest-id-result').innerText = guestId;
+                
+                qrDisplayBox.classList.remove('hidden');
+                setTimeout(() => {
+                    qrDisplayBox.style.opacity = "1";
+                    qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+                
+                document.getElementById('btn-show-qr').classList.remove('hidden');
+
+                if (payload.wish) {
+                    const wishesList = document.getElementById('wishes-list');
+                    const wishEl = document.createElement('div');
+                    wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
+                    wishEl.innerHTML = `
+                        <p class="text-[11px] font-bold text-[#4a4238]">${payload.name}</p>
+                        <p class="text-[11px] text-[#8c7355] mt-1">${payload.wish}</p>
+                    `;
+                    wishesList.prepend(wishEl);
+                }
+
+                submitBtn.style.backgroundColor = "#10b981";
+                btnText.innerText = "✓";
+                btnLoader.classList.add('hidden');
+            } else {
+                throw new Error(result.message || "Gagal menyimpan data.");
+            }
+        } catch (error) {
+            console.error("Submission Error:", error);
+            showToast(i18n[currentLang].msgError);
+            submitBtn.disabled = false;
+            btnText.innerText = i18n[currentLang].submitBtn;
+            btnLoader.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('btn-show-qr').addEventListener('click', () => {
+        qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    function initReveal() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+</script>
+</body>
+</html>
