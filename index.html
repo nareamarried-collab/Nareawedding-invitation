@@ -646,7 +646,7 @@
 
     function loadGuestFromLocal() {
         try {
-            const raw = localStorage.getItem('rsvp_guest_data');
+const raw = sessionStorage.getItem('rsvp_guest_data');
             if (!raw) return null;
             return JSON.parse(raw);
         } catch (err) {
@@ -718,29 +718,24 @@ const response = await fetch(SCRIPT_URL, {
 
             const result = await response.json();
 
-            if (result.status === 'success' || result.result === 'success') {
-                const guestId = result.guestId || 'Tamu000';
+           if (result.status === 'success' || result.result === 'success') {
+    const guestId = result.guestId || 'Tamu000';
 
-                renderQr(guestId);
+    renderQr(guestId);
 
-                saveGuestToLocal({
-                    guestId,
-                    name: payload.name,
-                    status: payload.status,
-                    guests: payload.guests,
-                    wish: payload.wish
-                });
+    addWishToList(payload.name, payload.wish);
+    showToast(i18n[currentLang].msgSuccess);
+    setSubmittedState();
 
-                addWishToList(payload.name, payload.wish);
-                showToast(i18n[currentLang].msgSuccess);
-                setSubmittedState();
+    rsvpForm.reset();
+    updateGuestFieldState();
 
-                setTimeout(() => {
-                    qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            } else {
-                throw new Error(result.message || 'Unknown error');
-            }
+    setTimeout(() => {
+        qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+} else {
+    throw new Error(result.message || 'Unknown error');
+}
         } catch (error) {
             console.error(error);
             showToast(i18n[currentLang].msgError);
@@ -764,16 +759,10 @@ const response = await fetch(SCRIPT_URL, {
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        changeLang('id');
-        updateGuestFieldState();
-
-        const savedGuest = loadGuestFromLocal();
-        if (savedGuest && savedGuest.guestId) {
-            renderQr(savedGuest.guestId);
-            btnShowQr.classList.remove('hidden');
-        }
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    changeLang('id');
+    updateGuestFieldState();
+});
 </script>
 </body>
 </html>
