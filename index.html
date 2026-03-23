@@ -440,15 +440,17 @@
             optAttending: "Hadir",
             optNotAttending: "Tidak Hadir",
             submitBtn: "Kirim Konfirmasi",
+            submittingBtn: "Mengirim...",
             showQrBtn: "Tampilkan QR Check-in",
             qrTitle: "QR Check-in Anda",
             qrInstruction: "Simpan QR ini untuk masuk ke venue acara.",
             wishesTitle: "Buku Tamu",
             wishesNote: "Doa & Ucapan Teman & Keluarga.",
             createdBy: "Created By",
-            msgSuccess: "Konfirmasi Berhasil!",
+            msgSuccess: "Konfirmasi berhasil dikirim.",
             msgError: "Gagal mengirim data.",
-            msgCopied: "Berhasil disalin!"
+            msgCopied: "Berhasil disalin!",
+            msgNameRequired: "Nama wajib diisi."
         },
         en: {
             theWeddingOf: "The Wedding Of",
@@ -485,189 +487,293 @@
             optAttending: "Attending",
             optNotAttending: "Declining",
             submitBtn: "Submit RSVP",
+            submittingBtn: "Submitting...",
             showQrBtn: "Show QR Check-in",
             qrTitle: "Your Check-in QR",
             qrInstruction: "Save this QR for venue check-in.",
             wishesTitle: "Guest Book",
             wishesNote: "Prayers & Wishes from Friends & Family.",
             createdBy: "Created By",
-            msgSuccess: "RSVP Submitted!",
+            msgSuccess: "RSVP submitted successfully.",
             msgError: "Failed to send data.",
-            msgCopied: "Copied!"
+            msgCopied: "Copied!",
+            msgNameRequired: "Name is required."
         }
     };
 
     let currentLang = 'id';
-    
+
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmuqQl5TigRjji3qKxKOzhIww04ogX3EVPv-4hzIFoMHUTKS8x9RNM1RytWXwSgn-F/exec";
-
-    function changeLang(lang) {
-        currentLang = lang;
-        // Centralized Replacement Logic
-        document.querySelectorAll('[data-t]').forEach(el => {
-            const key = el.getAttribute('data-t');
-            if (i18n[lang][key]) {
-                // If it's a select option, update the text properly
-                if (el.tagName === 'OPTION') {
-                    el.text = i18n[lang][key];
-                } else {
-                    el.innerText = i18n[lang][key];
-                }
-            }
-        });
-
-        // Specific Button Updates if text is outside data-t (fallback)
-        const submitBtnText = document.getElementById('btn-text');
-        if (submitBtnText && !submitBtnText.innerText.includes('✓')) {
-            submitBtnText.innerText = i18n[lang].submitBtn;
-        }
-
-        // Toggle Active Classes
-        document.getElementById('btn-id').classList.toggle('active', lang === 'id');
-        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-        
-        // Refresh RSVP placeholder if needed
-        document.getElementById('form-name').placeholder = "...";
-    }
 
     const bgMusic = document.getElementById('bg-music');
     const video = document.getElementById('prewed-video');
     const toast = document.getElementById("toast");
 
-    let isPlaying = false;
-
-    function openInvitation() {
-        document.getElementById('cover').classList.add('cover-hidden');
-        document.getElementById('main-content').style.display = 'block';
-        bgMusic.play().then(() => { 
-            isPlaying = true; 
-            document.getElementById('visualizer').classList.add('playing'); 
-        }).catch(() => {});
-        setTimeout(() => { 
-            document.getElementById('main-content').style.opacity = '1'; 
-            video.play().catch(() => {}); 
-            initReveal(); 
-        }, 300);
-        window.scrollTo(0, 0);
-    }
-
-    function toggleMusic() {
-        if (isPlaying) { 
-            bgMusic.pause(); 
-            document.getElementById('visualizer').classList.remove('playing'); 
-        } else { 
-            bgMusic.play().catch(() => {}); 
-            document.getElementById('visualizer').classList.add('playing'); 
-        }
-        isPlaying = !isPlaying;
-    }
-
-    function openGiftModal() { document.getElementById('gift-modal').style.display = 'flex'; }
-    function closeGiftModal() { document.getElementById('gift-modal').style.display = 'none'; }
-
-    function showToast(message) {
-        toast.innerText = message;
-        toast.className = "show";
-        setTimeout(() => { toast.className = ""; }, 3000);
-    }
-
-    function copyToClipboard(text) {
-        const el = document.createElement('textarea');
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        showToast(i18n[currentLang].msgCopied);
-    }
-
     const rsvpForm = document.getElementById('rsvp-form');
     const statusField = document.getElementById('form-status');
     const guestsWrapper = document.getElementById('guests-wrapper');
+    const guestsField = document.getElementById('form-guests');
     const submitBtn = document.getElementById('btn-submit');
     const btnText = document.getElementById('btn-text');
     const btnLoader = document.getElementById('btn-loader');
     const qrDisplayBox = document.getElementById('qr-display-box');
+    const qrImageResult = document.getElementById('qr-image-result');
+    const guestIdResult = document.getElementById('guest-id-result');
+    const btnShowQr = document.getElementById('btn-show-qr');
+    const nameField = document.getElementById('form-name');
+    const wishField = document.getElementById('form-wish');
+    const wishesList = document.getElementById('wishes-list');
 
-    statusField.addEventListener('change', () => {
-        guestsWrapper.style.opacity = statusField.value === 'Tidak Hadir' ? '0.3' : '1';
-    });
+    let isPlaying = false;
+
+    function changeLang(lang) {
+        currentLang = lang;
+
+        document.querySelectorAll('[data-t]').forEach(el => {
+            const key = el.getAttribute('data-t');
+            if (i18n[lang][key]) {
+                if (el.tagName === 'OPTION') {
+                    el.textContent = i18n[lang][key];
+                } else {
+                    el.textContent = i18n[lang][key];
+                }
+            }
+        });
+
+        if (!submitBtn.disabled) {
+            btnText.textContent = i18n[lang].submitBtn;
+        }
+
+        document.getElementById('btn-id').classList.toggle('active', lang === 'id');
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+
+    function openInvitation() {
+        document.getElementById('cover').classList.add('cover-hidden');
+        document.getElementById('main-content').style.display = 'block';
+
+        bgMusic.play().then(() => {
+            isPlaying = true;
+            document.getElementById('visualizer').classList.add('playing');
+        }).catch(() => {});
+
+        setTimeout(() => {
+            document.getElementById('main-content').style.opacity = '1';
+            video.play().catch(() => {});
+            initReveal();
+        }, 300);
+
+        window.scrollTo(0, 0);
+    }
+
+    function toggleMusic() {
+        if (isPlaying) {
+            bgMusic.pause();
+            document.getElementById('visualizer').classList.remove('playing');
+        } else {
+            bgMusic.play().catch(() => {});
+            document.getElementById('visualizer').classList.add('playing');
+        }
+        isPlaying = !isPlaying;
+    }
+
+    function openGiftModal() {
+        document.getElementById('gift-modal').style.display = 'flex';
+    }
+
+    function closeGiftModal() {
+        document.getElementById('gift-modal').style.display = 'none';
+    }
+
+    function showToast(message) {
+        toast.textContent = message;
+        toast.className = "show";
+        setTimeout(() => {
+            toast.className = "";
+        }, 3000);
+    }
+
+    async function copyToClipboard(text) {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            }
+            showToast(i18n[currentLang].msgCopied);
+        } catch (err) {
+            showToast(i18n[currentLang].msgError);
+        }
+    }
+
+    function normalizeStatus(statusValue) {
+        if (statusValue === 'hadir') return 'Hadir';
+        return 'Tidak Hadir';
+    }
+
+    function updateGuestFieldState() {
+        const attending = statusField.value === 'hadir';
+        guestsWrapper.style.opacity = attending ? '1' : '0.4';
+        guestsField.disabled = !attending;
+        if (!attending) {
+            guestsField.value = '0';
+        } else if (guestsField.value === '0') {
+            guestsField.value = '1';
+        }
+    }
+
+    function renderQr(guestId) {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(guestId)}`;
+        qrImageResult.src = qrUrl;
+        guestIdResult.textContent = guestId;
+
+        qrDisplayBox.classList.remove('hidden');
+        setTimeout(() => {
+            qrDisplayBox.style.opacity = '1';
+        }, 100);
+
+        btnShowQr.classList.remove('hidden');
+    }
+
+    function saveGuestToLocal(data) {
+        localStorage.setItem('rsvp_guest_data', JSON.stringify(data));
+    }
+
+    function loadGuestFromLocal() {
+        try {
+            const raw = localStorage.getItem('rsvp_guest_data');
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch (err) {
+            return null;
+        }
+    }
+
+    function addWishToList(name, wish) {
+        if (!wish) return;
+
+        const wishEl = document.createElement('div');
+        wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
+        wishEl.innerHTML = `
+            <p class="text-[11px] font-bold text-[#4a4238]"></p>
+            <p class="text-[11px] text-[#8c7355] mt-1"></p>
+        `;
+
+        wishEl.querySelector('p:nth-child(1)').textContent = name;
+        wishEl.querySelector('p:nth-child(2)').textContent = wish;
+        wishesList.prepend(wishEl);
+    }
+
+    function setSubmittingState(isSubmitting) {
+        submitBtn.disabled = isSubmitting;
+        btnLoader.classList.toggle('hidden', !isSubmitting);
+        btnText.textContent = isSubmitting ? i18n[currentLang].submittingBtn : i18n[currentLang].submitBtn;
+    }
+
+    function setSubmittedState() {
+        submitBtn.disabled = true;
+        btnLoader.classList.add('hidden');
+        btnText.textContent = '✓ Submitted';
+        submitBtn.classList.remove('bg-[#8c7355]');
+        submitBtn.classList.add('bg-emerald-500');
+    }
+
+    statusField.addEventListener('change', updateGuestFieldState);
 
     rsvpForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        submitBtn.disabled = true;
-        btnText.innerText = "...";
-        btnLoader.classList.remove('hidden');
 
-        const payload = {
-            name: document.getElementById('form-name').value.trim(),
-            status: document.getElementById('form-status').value,
-            guests: document.getElementById('form-status').value === 'Hadir' ? document.getElementById('form-guests').value : 0,
-            wish: document.getElementById('form-wish').value.trim()
-        };
+        const name = nameField.value.trim();
+        const wish = wishField.value.trim();
+
+        if (!name) {
+            showToast(i18n[currentLang].msgNameRequired);
+            return;
+        }
+
+        setSubmittingState(true);
+
+const payload = {
+  name: document.getElementById('form-name').value.trim(),
+  status: document.getElementById('form-status').value === 'hadir' ? 'Hadir' : 'Tidak Hadir',
+  guests: document.getElementById('form-status').value === 'hadir'
+    ? Number(document.getElementById('form-guests').value)
+    : 0,
+  wish: document.getElementById('form-wish').value.trim()
+};
 
         try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
-            });
+const response = await fetch(SCRIPT_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+});
 
             const result = await response.json();
 
-            if (result.status === "success" || result.result === "success") {
+            if (result.status === 'success' || result.result === 'success') {
+                const guestId = result.guestId || 'Tamu000';
+
+                renderQr(guestId);
+
+                saveGuestToLocal({
+                    guestId,
+                    name: payload.name,
+                    status: payload.status,
+                    guests: payload.guests,
+                    wish: payload.wish
+                });
+
+                addWishToList(payload.name, payload.wish);
                 showToast(i18n[currentLang].msgSuccess);
-                const guestId = result.guestId || result.GuestID || "CONFIRMED";
-                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(guestId)}`;
+                setSubmittedState();
 
-                document.getElementById('qr-image-result').src = qrUrl;
-                document.getElementById('guest-id-result').innerText = guestId;
-                
-                qrDisplayBox.classList.remove('hidden');
                 setTimeout(() => {
-                    qrDisplayBox.style.opacity = "1";
                     qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
-                
-                document.getElementById('btn-show-qr').classList.remove('hidden');
-
-                if (payload.wish) {
-                    const wishesList = document.getElementById('wishes-list');
-                    const wishEl = document.createElement('div');
-                    wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
-                    wishEl.innerHTML = `
-                        <p class="text-[11px] font-bold text-[#4a4238]">${payload.name}</p>
-                        <p class="text-[11px] text-[#8c7355] mt-1">${payload.wish}</p>
-                    `;
-                    wishesList.prepend(wishEl);
-                }
-
-                submitBtn.style.backgroundColor = "#10b981";
-                btnText.innerText = "✓";
-                btnLoader.classList.add('hidden');
+                }, 300);
             } else {
-                throw new Error(result.message || "Error");
+                throw new Error(result.message || 'Unknown error');
             }
         } catch (error) {
+            console.error(error);
             showToast(i18n[currentLang].msgError);
-            submitBtn.disabled = false;
-            btnText.innerText = i18n[currentLang].submitBtn;
-            btnLoader.classList.add('hidden');
+            setSubmittingState(false);
         }
     });
 
-    document.getElementById('btn-show-qr').addEventListener('click', () => {
+    btnShowQr.addEventListener('click', () => {
         qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     function initReveal() {
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
         }, { threshold: 0.1 });
+
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        changeLang('id');
+        updateGuestFieldState();
+
+        const savedGuest = loadGuestFromLocal();
+        if (savedGuest && savedGuest.guestId) {
+            renderQr(savedGuest.guestId);
+            btnShowQr.classList.remove('hidden');
+        }
+    });
 </script>
 </body>
 </html>
