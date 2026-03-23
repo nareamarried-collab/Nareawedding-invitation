@@ -310,10 +310,10 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label data-t="labelStatus" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Kehadiran</label>
-                            <select id="form-status" class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none">
-                                <option value="Hadir" data-t="optAttending">Hadir</option>
-                                <option value="Tidak Hadir" data-t="optNotAttending">Tidak Hadir</option>
-                            </select>
+<select id="form-status" class="w-full px-4 py-3 rounded-xl border border-[#e5dfd3] bg-[#fcfbf9] text-xs outline-none">
+    <option value="hadir" data-t="optAttending">Hadir</option>
+    <option value="tidak_hadir" data-t="optNotAttending">Tidak Hadir</option>
+</select>
                         </div>
                         <div id="guests-wrapper">
                             <label data-t="labelGuests" class="text-[9px] uppercase tracking-widest font-bold text-[#a89985] ml-2 mb-1 block">Jumlah Tamu</label>
@@ -711,7 +711,7 @@ const payload = {
 const response = await fetch(SCRIPT_URL, {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'text/plain;charset=utf-8'
   },
   body: JSON.stringify(payload)
 });
