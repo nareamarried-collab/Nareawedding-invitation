@@ -640,19 +640,6 @@
         btnShowQr.classList.remove('hidden');
     }
 
-    function saveGuestToLocal(data) {
-        localStorage.setItem('rsvp_guest_data', JSON.stringify(data));
-    }
-
-    function loadGuestFromLocal() {
-        try {
-const raw = sessionStorage.getItem('rsvp_guest_data');
-            if (!raw) return null;
-            return JSON.parse(raw);
-        } catch (err) {
-            return null;
-        }
-    }
 
     function addWishToList(name, wish) {
         if (!wish) return;
@@ -668,7 +655,25 @@ const raw = sessionStorage.getItem('rsvp_guest_data');
         wishEl.querySelector('p:nth-child(2)').textContent = wish;
         wishesList.prepend(wishEl);
     }
+async function loadWishes() {
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const result = await response.json();
 
+        if (result.status !== 'success' || !Array.isArray(result.wishes)) {
+            return;
+        }
+
+        wishesList.innerHTML = '';
+
+        result.wishes.forEach(item => {
+            addWishToList(item.name, item.wish);
+        });
+
+    } catch (error) {
+        console.error('Error load wishes:', error);
+    }
+}
     function setSubmittingState(isSubmitting) {
         submitBtn.disabled = isSubmitting;
         btnLoader.classList.toggle('hidden', !isSubmitting);
@@ -723,7 +728,7 @@ const response = await fetch(SCRIPT_URL, {
 
     renderQr(guestId);
 
-    addWishToList(payload.name, payload.wish);
+    await loadWishes();
     showToast(i18n[currentLang].msgSuccess);
     setSubmittedState();
 
@@ -760,6 +765,7 @@ const response = await fetch(SCRIPT_URL, {
     }
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadWishes();
     changeLang('id');
     updateGuestFieldState();
 });
