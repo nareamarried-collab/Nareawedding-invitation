@@ -197,30 +197,37 @@
         background: rgba(140, 115, 85, 0.08);
     }
 
-    .section-bg {
-        position: relative;
-        overflow: hidden;
-        isolation: isolate;
-    }
+.section-bg {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
 
-    .section-bg::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: -2;
-        transform: scale(1.02);
-    }
+/* GAMBAR */
+.section-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    transform: scale(1.05);
+    filter: brightness(0.98) contrast(1.05); /* biar lebih hidup */
+}
 
-    .section-bg::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: var(--color-overlay-light);
-        z-index: -1;
-    }
+/* OVERLAY (dibikin lebih tipis + gradient) */
+.section-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(242,238,233,0.55),
+        rgba(242,238,233,0.35)
+    );
+    z-index: -1;
+}
 
     .bg-home::before {
         background-image: url('assets/foto/page-home.jpeg');
@@ -337,6 +344,15 @@
             animation: none !important;
             transition: none !important;
         }
+        /* gallery lebih clear */
+.bg-gallery::after {
+    background: rgba(242,238,233,0.3);
+}
+
+/* rsvp lebih readable */
+.bg-rsvp::after {
+    background: rgba(242,238,233,0.6);
+}
     }
 </style>
     <body class="text-[#4a4238] antialiased">
