@@ -21,8 +21,7 @@
         --color-muted: #a89985;
         --color-border: #e5dfd3;
         --color-scrollbar: #b89b7a;
-        --color-overlay-light: rgba(242, 238, 233, 0.82);
-    }
+         }
 
     * {
         box-sizing: border-box;
@@ -228,7 +227,15 @@
     );
     z-index: -1;
 }
-
+.cover-bg {
+    background-color: #1f1a16;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url('assets/foto/cover.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
     .bg-home::before {
         background-image: url('assets/foto/page-home.jpeg');
     }
@@ -267,6 +274,15 @@
         rgba(242,238,233,0.35)
     );
 }
+    /* gallery lebih clear */
+.bg-gallery::after {
+    background: rgba(242,238,233,0.3);
+}
+
+/* rsvp lebih readable */
+.bg-rsvp::after {
+    background: rgba(242,238,233,0.6);
+}
 #wishes {
     padding-bottom: 0;
 }
@@ -280,19 +296,21 @@ footer .created-by-text {
     opacity: 0.85;
 }
 
-footer .narea-text {
-    color: #8c7355; /* balik ke warna sebelumnya */
-    text-shadow:
-        0 1px 4px rgba(255,255,255,0.6),
-        0 0 10px rgba(255,255,255,0.35);
-}
 footer h2,
-footer p,
-footer .font-signature {
-    text-shadow: 
+footer .footer-date,
+footer .created-by-text,
+footer .narea-text {
+    text-shadow:
         0 1px 4px rgba(255,255,255,0.5),
         0 0 10px rgba(255,255,255,0.35);
 }
+
+footer .narea-text {
+    color: #8c7355;
+    text-shadow:
+        0 1px 4px rgba(255,255,255,0.6),
+        0 0 10px rgba(255,255,255,0.35);
+}    
     .glass-card {
         background: rgba(255, 255, 255, 0.62);
         backdrop-filter: blur(12px);
@@ -380,15 +398,6 @@ footer .font-signature {
             animation: none !important;
             transition: none !important;
         }
-        /* gallery lebih clear */
-.bg-gallery::after {
-    background: rgba(242,238,233,0.3);
-}
-
-/* rsvp lebih readable */
-.bg-rsvp::after {
-    background: rgba(242,238,233,0.6);
-}
     }
 </style>
     <body class="text-[#4a4238] antialiased">
@@ -405,8 +414,7 @@ footer .font-signature {
     </audio>
 
     <!-- COVER -->
-<div id="cover" class="fixed inset-0 z-[100] flex flex-col items-center justify-center text-white text-center px-6 transition-transform duration-700 ease-in-out bg-[#1f1a16]"
-style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('assets/foto/cover.jpeg'); background-size: cover; background-position: center;">   
+        <div id="cover" class="cover-bg fixed inset-0 z-[100] flex flex-col items-center justify-center text-white text-center px-6 transition-transform duration-700 ease-in-out">
     <div class="w-full max-w-md">
         <p data-t="theWeddingOf" class="text-[10px] tracking-[0.6em] mb-4 uppercase opacity-80 font-semibold">The Wedding Of</p>
         <h1 class="text-6xl md:text-7xl font-signature mb-10 text-white shadow-sm">Asya & Andre</h1>
@@ -999,11 +1007,23 @@ const i18n = {
         document.querySelectorAll('[data-t]').forEach(el => {
             const key = el.getAttribute('data-t');
             if (i18n[lang][key]) {
-                if (el.tagName === 'OPTION') {
-                    el.textContent = i18n[lang][key];
-                } else {
-                    el.textContent = i18n[lang][key];
-                }
+function changeLang(lang) {
+    currentLang = lang;
+
+    document.querySelectorAll('[data-t]').forEach(el => {
+        const key = el.getAttribute('data-t');
+        if (i18n[lang][key]) {
+            el.textContent = i18n[lang][key];
+        }
+    });
+
+    if (!submitBtn.disabled) {
+        btnText.textContent = i18n[lang].submitBtn;
+    }
+
+    document.getElementById('btn-id').classList.toggle('active', lang === 'id');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+}
             }
         });
 
@@ -1076,12 +1096,11 @@ const i18n = {
         } catch (err) {
             showToast(i18n[currentLang].msgError);
         }
-    }
+    };
 
-    function normalizeStatus(statusValue) {
-        if (statusValue === 'hadir') return 'Hadir';
-        return 'Tidak Hadir';
-    }
+    const key = (statusValue || '').toLowerCase().trim();
+    return map[key] || 'Tidak Hadir';
+}
 
     function updateGuestFieldState() {
         const attending = statusField.value === 'hadir';
