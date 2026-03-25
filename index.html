@@ -581,18 +581,20 @@ style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(
         </section>
 
         <!-- WISHES LIST -->
-        <section id="wishes" class="p-8 bg-white py-16 text-center">
-            <div class="bg-[#fcfbf9] rounded-[2.5rem] p-8 shadow-sm border border-[#e5dfd3] reveal fade-up">
-                <h3 data-t="wishesTitle" class="text-3xl font-serif italic title-bold text-[#6b5841] mb-2">
-    Buku Tamu
-</h3>
-                <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">Doa & Ucapan Teman & Keluarga.</p>
+<section id="wishes" class="p-8 bg-white py-16 text-center">
+    <div class="bg-[#fcfbf9] rounded-[2.5rem] p-8 shadow-sm border border-[#e5dfd3] reveal fade-up">
+        <h3 data-t="wishesTitle" class="text-3xl font-serif italic title-bold text-[#6b5841] mb-2">
+            Buku Tamu
+        </h3>
+        <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">
+            Doa & Ucapan Teman & Keluarga.
+        </p>
 
-                <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
-                    <!-- Data wishes will appear here -->
-                </div>
-            </div>
-        </section>
+        <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin">
+            <!-- Data wishes will appear here -->
+        </div>
+    </div>
+</section>
 
         <!-- FOOTER -->
         <footer class="bg-white py-12 px-8 text-center border-t border-[#f2eee9]">
@@ -870,26 +872,36 @@ const i18n = {
     }
 
 
-    function addWishToList(name, wish) {
-        if (!wish) return;
+function addWishToList(name, wish) {
+    if (!wish || String(wish).trim() === '') return;
 
-        const wishEl = document.createElement('div');
-        wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
-        wishEl.innerHTML = `
-            <p class="text-[11px] font-bold text-[#4a4238]"></p>
-            <p class="text-[11px] text-[#8c7355] mt-1"></p>
-        `;
+    const wishEl = document.createElement('div');
+    wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
 
-        wishEl.querySelector('p:nth-child(1)').textContent = name;
-        wishEl.querySelector('p:nth-child(2)').textContent = wish;
-        wishesList.prepend(wishEl);
-    }
+    wishEl.innerHTML = `
+        <p class="text-[11px] font-bold text-[#4a4238]"></p>
+        <p class="text-[11px] text-[#8c7355] mt-1 leading-relaxed"></p>
+    `;
+
+    wishEl.querySelector('p:nth-child(1)').textContent = name || 'Guest';
+    wishEl.querySelector('p:nth-child(2)').textContent = wish;
+
+    wishesList.appendChild(wishEl);
+}
+
 async function loadWishes() {
     try {
-        const response = await fetch(SCRIPT_URL);
+        const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
         const result = await response.json();
 
+        console.log('Wishes response:', result);
+
         if (result.status !== 'success' || !Array.isArray(result.wishes)) {
+            wishesList.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-[#8c7355]">
+                    Belum ada ucapan.
+                </div>
+            `;
             return;
         }
 
@@ -899,9 +911,23 @@ async function loadWishes() {
             addWishToList(item.name, item.wish);
         });
 
+        if (result.wishes.length === 0) {
+            wishesList.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-[#8c7355]">
+                    Belum ada ucapan.
+                </div>
+            `;
+        }
+
     } catch (error) {
         console.error('Error load wishes:', error);
+        wishesList.innerHTML = `
+            <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-red-500">
+                Gagal memuat ucapan.
+            </div>
+        `;
     }
+
 }
     function setSubmittingState(isSubmitting) {
         submitBtn.disabled = isSubmitting;
