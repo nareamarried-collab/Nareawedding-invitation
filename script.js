@@ -1,4 +1,101 @@
-const i18n = { ... }; // (biarkan seperti punya kamu, tidak saya ubah)
+const i18n = {
+    id: {
+        theWeddingOf: "The Wedding Of",
+        toDear: "Kepada Yth. Bapak/Ibu/Saudara/i",
+        guestNameDefault: "Tamu Undangan",
+        openInvitationBtn: "Buka Undangan",
+        navCouple: "Mempelai",
+        navEvent: "Acara",
+        navGallery: "Galeri",
+        navWishes: "Ucapan",
+        weAreMarried: "Kami Menikah",
+        saveDateBtn: "Simpan Jadwal",
+        mempelai: "Mempelai",
+        daughterOf: "Putri dari",
+        parentArsya: "Bpk. Adi Sofian & Ibu Roskomala Sari",
+        sonOf: "Putra dari",
+        parentAndrea: "Bpk. Lukman (Alm) & Ibu Isma Delfi",
+        eventInfo: "Informasi Acara",
+        sunday: "Minggu",
+        fullDate: "April 05, 2026",
+        reception: "Resepsi",
+        receptionTime: "19:00 WIB - 21:00 WIB",
+        weddingGift: "Wedding Gift",
+        giftNote: "Terima kasih atas tanda kasih Anda untuk kami.",
+        sendGiftBtn: "Kirim Hadiah",
+        copyAccountBtn: "Salin Rekening",
+        copyAddressBtn: "Salin Alamat",
+        shippingAddress: "Alamat Pengiriman",
+        rsvpTitle: "Konfirmasi Kehadiran",
+        rsvpNote: "Silakan isi formulir di bawah ini.",
+        labelName: "Nama",
+        labelStatus: "Kehadiran",
+        labelGuests: "Jumlah Tamu",
+        labelWish: "Ucapan / Doa",
+        optAttending: "Hadir",
+        optNotAttending: "Tidak Hadir",
+        submitBtn: "Kirim Konfirmasi",
+        submittingBtn: "Mengirim...",
+        showQrBtn: "Tampilkan QR Check-in",
+        qrTitle: "QR Check-in Anda",
+        qrInstruction: "Simpan QR ini untuk masuk ke venue acara.",
+        wishesTitle: "Buku Tamu",
+        wishesNote: "Doa & Ucapan Teman & Keluarga.",
+        createdBy: "Created By",
+        msgSuccess: "Konfirmasi berhasil dikirim.",
+        msgError: "Gagal mengirim data.",
+        msgCopied: "Berhasil disalin!",
+        msgNameRequired: "Nama wajib diisi."
+    },
+    en: {
+        theWeddingOf: "The Wedding Of",
+        toDear: "To Dear Mr/Mrs/Ms",
+        guestNameDefault: "Invited Guest",
+        openInvitationBtn: "Open Invitation",
+        navCouple: "Couple",
+        navEvent: "Event",
+        navGallery: "Gallery",
+        navWishes: "Wishes",
+        weAreMarried: "We Are Getting Married",
+        saveDateBtn: "Save the Date",
+        mempelai: "Bride & Groom",
+        daughterOf: "Daughter of",
+        parentArsya: "Mr. Adi Sofian & Mrs. Roskomala Sari",
+        sonOf: "Son of",
+        parentAndrea: "Mr. Lukman (dec) & Mrs. Isma Delfi",
+        eventInfo: "Event Information",
+        sunday: "Sunday",
+        fullDate: "April 05th, 2026",
+        reception: "Reception",
+        receptionTime: "07:00 PM - 09:00 PM",
+        weddingGift: "Wedding Gift",
+        giftNote: "Thank you for your kindness towards us.",
+        sendGiftBtn: "Send Gift",
+        copyAccountBtn: "Copy Account",
+        copyAddressBtn: "Copy Address",
+        shippingAddress: "Shipping Address",
+        rsvpTitle: "RSVP Confirmation",
+        rsvpNote: "Please fill out the form below.",
+        labelName: "Name",
+        labelStatus: "Attendance",
+        labelGuests: "Number of Guests",
+        labelWish: "Wishes / Prayers",
+        optAttending: "Attending",
+        optNotAttending: "Declining",
+        submitBtn: "Submit RSVP",
+        submittingBtn: "Submitting...",
+        showQrBtn: "Show QR Check-in",
+        qrTitle: "Your Check-in QR",
+        qrInstruction: "Save this QR for venue check-in.",
+        wishesTitle: "Guest Book",
+        wishesNote: "Prayers & Wishes from Friends & Family.",
+        createdBy: "Created By",
+        msgSuccess: "RSVP submitted successfully.",
+        msgError: "Failed to send data.",
+        msgCopied: "Copied!",
+        msgNameRequired: "Name is required."
+    }
+};
 
 let currentLang = 'id';
 
@@ -6,7 +103,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDXCBYjo6R4tZqih_CF
 
 const bgMusic = document.getElementById('bg-music');
 const video = document.getElementById('prewed-video');
-const toast = document.getElementById("toast");
+const toast = document.getElementById('toast');
 
 const rsvpForm = document.getElementById('rsvp-form');
 const statusField = document.getElementById('form-status');
@@ -28,30 +125,48 @@ let isPlaying = false;
 function changeLang(lang) {
     currentLang = lang;
 
-    document.querySelectorAll('[data-t]').forEach(el => {
+    document.querySelectorAll('[data-t]').forEach((el) => {
         const key = el.getAttribute('data-t');
-        if (i18n[lang][key]) {
+        if (i18n[lang] && i18n[lang][key]) {
             el.textContent = i18n[lang][key];
         }
     });
 
-    if (!submitBtn.disabled) {
+    if (submitBtn && btnText && !submitBtn.disabled) {
         btnText.textContent = i18n[lang].submitBtn;
     }
 
-    document.getElementById('btn-id').classList.toggle('active', lang === 'id');
-    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    const btnId = document.getElementById('btn-id');
+    const btnEn = document.getElementById('btn-en');
+
+    if (btnId) btnId.classList.toggle('active', lang === 'id');
+    if (btnEn) btnEn.classList.toggle('active', lang === 'en');
 }
 
 function openInvitation() {
-    document.getElementById('cover').classList.add('cover-hidden');
-    document.getElementById('main-content').style.display = 'block';
+    const cover = document.getElementById('cover');
+    const mainContent = document.getElementById('main-content');
+    const visualizer = document.getElementById('visualizer');
 
-    bgMusic.play().catch(() => {});
+    if (!cover || !mainContent) return;
+
+    cover.classList.add('cover-hidden');
+    mainContent.style.display = 'block';
+
+    if (bgMusic) {
+        bgMusic.play()
+            .then(() => {
+                isPlaying = true;
+                if (visualizer) visualizer.classList.add('playing');
+            })
+            .catch(() => {});
+    }
 
     setTimeout(() => {
-        document.getElementById('main-content').style.opacity = '1';
-        video?.play().catch(() => {});
+        mainContent.style.opacity = '1';
+        if (video) {
+            video.play().catch(() => {});
+        }
         initReveal();
     }, 300);
 
@@ -59,133 +174,252 @@ function openInvitation() {
 }
 
 function toggleMusic() {
+    const visualizer = document.getElementById('visualizer');
+    if (!bgMusic) return;
+
     if (isPlaying) {
         bgMusic.pause();
-        document.getElementById('visualizer').classList.remove('playing');
+        if (visualizer) visualizer.classList.remove('playing');
     } else {
         bgMusic.play().catch(() => {});
-        document.getElementById('visualizer').classList.add('playing');
+        if (visualizer) visualizer.classList.add('playing');
     }
+
     isPlaying = !isPlaying;
 }
 
+function openGiftModal() {
+    const giftModal = document.getElementById('gift-modal');
+    if (giftModal) giftModal.style.display = 'flex';
+}
+
+function closeGiftModal() {
+    const giftModal = document.getElementById('gift-modal');
+    if (giftModal) giftModal.style.display = 'none';
+}
+
 function showToast(message) {
+    if (!toast) return;
+
     toast.textContent = message;
-    toast.className = "show";
-    setTimeout(() => toast.className = "", 3000);
+    toast.className = 'show';
+
+    setTimeout(() => {
+        toast.className = '';
+    }, 3000);
+}
+
+async function copyToClipboard(text) {
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+        showToast(i18n[currentLang].msgCopied);
+    } catch (err) {
+        showToast(i18n[currentLang].msgError);
+    }
 }
 
 function updateGuestFieldState() {
+    if (!statusField || !guestsWrapper || !guestsField) return;
+
     const attending = statusField.value === 'hadir';
     guestsWrapper.style.opacity = attending ? '1' : '0.4';
     guestsField.disabled = !attending;
-    guestsField.value = attending ? (guestsField.value || '1') : '0';
+
+    if (!attending) {
+        guestsField.value = '0';
+    } else if (guestsField.value === '0' || !guestsField.value) {
+        guestsField.value = '1';
+    }
 }
 
 function renderQr(guestId) {
+    if (!qrImageResult || !guestIdResult || !qrDisplayBox || !btnShowQr) return;
+
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(guestId)}`;
     qrImageResult.src = qrUrl;
     guestIdResult.textContent = guestId;
 
     qrDisplayBox.classList.remove('hidden');
-    setTimeout(() => qrDisplayBox.style.opacity = '1', 100);
+    setTimeout(() => {
+        qrDisplayBox.style.opacity = '1';
+    }, 100);
 
     btnShowQr.classList.remove('hidden');
 }
 
 function addWishToList(name, wish) {
-    if (!wish?.trim()) return;
+    if (!wishesList || !wish || String(wish).trim() === '') return;
 
-    const el = document.createElement('div');
-    el.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
+    const wishEl = document.createElement('div');
+    wishEl.className = 'bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm';
 
-    el.innerHTML = `
-        <p class="text-[11px] font-bold text-[#4a4238]">${name || 'Guest'}</p>
-        <p class="text-[11px] text-[#8c7355] mt-1 leading-relaxed">${wish}</p>
+    wishEl.innerHTML = `
+        <p class="text-[11px] font-bold text-[#4a4238]"></p>
+        <p class="text-[11px] text-[#8c7355] mt-1 leading-relaxed"></p>
     `;
 
-    wishesList.appendChild(el);
+    wishEl.querySelector('p:nth-child(1)').textContent = name || 'Guest';
+    wishEl.querySelector('p:nth-child(2)').textContent = wish;
+
+    wishesList.appendChild(wishEl);
 }
 
 async function loadWishes() {
+    if (!wishesList) return;
+
     try {
-        const res = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
-        const data = await res.json();
+        const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
+        const result = await response.json();
 
-        wishesList.innerHTML = '';
+        console.log('Wishes response:', result);
 
-        if (!data.wishes?.length) {
-            wishesList.innerHTML = `<div class="text-center text-[11px] text-[#8c7355]">Belum ada ucapan.</div>`;
+        if (result.status !== 'success' || !Array.isArray(result.wishes)) {
+            wishesList.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-[#8c7355]">
+                    Belum ada ucapan.
+                </div>
+            `;
             return;
         }
 
-        data.wishes.forEach(w => addWishToList(w.name, w.wish));
+        wishesList.innerHTML = '';
 
-    } catch (e) {
-        console.error(e);
+        result.wishes.forEach((item) => {
+            addWishToList(item.name, item.wish);
+        });
+
+        if (result.wishes.length === 0) {
+            wishesList.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-[#8c7355]">
+                    Belum ada ucapan.
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error load wishes:', error);
+        wishesList.innerHTML = `
+            <div class="bg-white p-4 rounded-2xl border border-[#e5dfd3] shadow-sm text-center text-[11px] text-red-500">
+                Gagal memuat ucapan.
+            </div>
+        `;
     }
 }
 
-function setSubmittingState(v) {
-    submitBtn.disabled = v;
-    btnLoader.classList.toggle('hidden', !v);
-    btnText.textContent = v ? i18n[currentLang].submittingBtn : i18n[currentLang].submitBtn;
+function setSubmittingState(isSubmitting) {
+    if (!submitBtn || !btnLoader || !btnText) return;
+
+    submitBtn.disabled = isSubmitting;
+    btnLoader.classList.toggle('hidden', !isSubmitting);
+    btnText.textContent = isSubmitting
+        ? i18n[currentLang].submittingBtn
+        : i18n[currentLang].submitBtn;
 }
 
 function setSubmittedState() {
+    if (!submitBtn || !btnLoader || !btnText) return;
+
     submitBtn.disabled = true;
+    btnLoader.classList.add('hidden');
     btnText.textContent = '✓ Submitted';
+    submitBtn.classList.remove('bg-[#8c7355]');
+    submitBtn.classList.add('bg-emerald-500');
 }
 
-rsvpForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+function initReveal() {
+    const elements = document.querySelectorAll('.reveal');
+    if (!elements.length) return;
 
-    const name = nameField.value.trim();
-    if (!name) {
-        showToast(i18n[currentLang].msgNameRequired);
-        return;
-    }
-
-    setSubmittingState(true);
-
-    const payload = {
-        name,
-        status: statusField.value === 'hadir' ? 'Hadir' : 'Tidak Hadir',
-        guests: statusField.value === 'hadir' ? Number(guestsField.value) : 0,
-        wish: wishField.value.trim()
-    };
-
-    try {
-        const res = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(payload)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
         });
+    }, { threshold: 0.1 });
 
-        const result = await res.json();
+    elements.forEach((el) => observer.observe(el));
+}
 
-        if (result.status === 'success') {
-            renderQr(result.guestId);
-            await loadWishes();
-            setSubmittedState();
-            rsvpForm.reset();
-            updateGuestFieldState();
+if (statusField) {
+    statusField.addEventListener('change', updateGuestFieldState);
+}
+
+if (rsvpForm) {
+    rsvpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = nameField ? nameField.value.trim() : '';
+        const wish = wishField ? wishField.value.trim() : '';
+
+        if (!name) {
+            showToast(i18n[currentLang].msgNameRequired);
+            return;
         }
 
-    } catch (err) {
-        console.error(err);
-        setSubmittingState(false);
-    }
-});
+        setSubmittingState(true);
 
-function initReveal() {
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (e.isIntersecting) e.target.classList.add('active');
-        });
+        const payload = {
+            name,
+            status: statusField && statusField.value === 'hadir' ? 'Hadir' : 'Tidak Hadir',
+            guests: statusField && statusField.value === 'hadir'
+                ? Number(guestsField ? guestsField.value : 0)
+                : 0,
+            wish
+        };
+
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success' || result.result === 'success') {
+                const guestId = result.guestId || 'Tamu000';
+
+                renderQr(guestId);
+                await loadWishes();
+                showToast(i18n[currentLang].msgSuccess);
+                setSubmittedState();
+
+                rsvpForm.reset();
+                updateGuestFieldState();
+
+                setTimeout(() => {
+                    if (qrDisplayBox) {
+                        qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else {
+                throw new Error(result.message || 'Unknown error');
+            }
+        } catch (error) {
+            console.error(error);
+            showToast(i18n[currentLang].msgError);
+            setSubmittingState(false);
+        }
     });
+}
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+if (btnShowQr) {
+    btnShowQr.addEventListener('click', () => {
+        if (qrDisplayBox) {
+            qrDisplayBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -193,3 +427,10 @@ document.addEventListener('DOMContentLoaded', () => {
     changeLang('id');
     updateGuestFieldState();
 });
+
+window.changeLang = changeLang;
+window.openInvitation = openInvitation;
+window.toggleMusic = toggleMusic;
+window.openGiftModal = openGiftModal;
+window.closeGiftModal = closeGiftModal;
+window.copyToClipboard = copyToClipboard;
