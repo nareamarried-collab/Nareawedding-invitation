@@ -253,9 +253,18 @@
         background-image: url('assets/foto/page-rsvp.jpeg');
     }
 
-    .bg-footer::before {
-        background-image: url('assets/foto/page-footer.jpeg');
-    }
+.bg-footer::before {
+    background-image: url('assets/foto/page-footer.jpeg');
+    background-position: center 90%;
+}
+
+.bg-footer::after {
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.15)
+    );
+}
 
     .glass-card {
         background: rgba(255, 255, 255, 0.62);
