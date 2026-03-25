@@ -144,33 +144,36 @@ function changeLang(lang) {
 }
 
 function openInvitation() {
+    // 1. Hide the cover
     const cover = document.getElementById('cover');
+    if (cover) cover.classList.add('cover-hidden');
+
+    // 2. Show the main content
     const mainContent = document.getElementById('main-content');
-    const visualizer = document.getElementById('visualizer');
-
-    if (!cover || !mainContent) return;
-
-    cover.classList.add('cover-hidden');
-    mainContent.style.display = 'block';
-
-    if (bgMusic) {
-        bgMusic.play()
-            .then(() => {
-                isPlaying = true;
-                if (visualizer) visualizer.classList.add('playing');
-            })
-            .catch(() => {});
+    if (mainContent) {
+        mainContent.style.display = 'block';
+        setTimeout(() => {
+            mainContent.style.opacity = '1';
+            // CRITICAL: This line makes the photos and content appear!
+            initReveal(); 
+        }, 10);
     }
 
-    setTimeout(() => {
-        mainContent.style.opacity = '1';
-        if (video) {
-            video.play().catch(() => {});
-        }
-        initReveal();
-    }, 300);
-
-    window.scrollTo(0, 0);
+    // 3. Play the music
+    if (bgMusic) {
+        bgMusic.play().catch(e => console.log("Music blocked"));
+        isPlaying = true; // Sync the state
+    }
+    
+    // 4. Start the video
+    const video = document.getElementById('prewed-video');
+    if (video) {
+        video.play().catch(e => console.log("Video blocked"));
+    }
+    
+    // 5. Update UI
+    const musicToggle = document.getElementById('music-toggle');
+    if (musicToggle) musicToggle.classList.add('playing');
 }
 
 function toggleMusic() {
@@ -423,9 +426,22 @@ if (btnShowQr) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestName = urlParams.get('to');
+    const guestDisplay = document.getElementById('guest-name-cover');
+
+    if (guestName && guestDisplay) {
+        guestDisplay.textContent = guestName;
+    }
+    
     loadWishes();
     changeLang('id');
     updateGuestFieldState();
+
+    if (video) {
+        video.muted = true; // Essential for browser playback policies
+        video.setAttribute('playsinline', ''); 
+    }
 });
 
 window.changeLang = changeLang;
