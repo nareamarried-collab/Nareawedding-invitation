@@ -274,6 +274,19 @@
 footer {
     padding-top: 40px;
 }
+/* Created By (lebih soft) */
+footer .created-by-text {
+    letter-spacing: 0.25em;
+    opacity: 0.85;
+}
+
+/* Narea (highlight utama) */
+footer .narea-text {
+    color: #d8c3a5;
+    text-shadow:
+        0 1px 4px rgba(255,255,255,0.6),
+        0 0 10px rgba(255,255,255,0.35);
+}
 footer h2,
 footer p,
 footer .font-signature {
@@ -821,10 +834,14 @@ style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(
     <footer class="py-12 px-8 text-center">
         <h2 class="text-4xl font-signature signature-bold text-[#6b5841] mb-1">Asya & Andre</h2>
         <p class="text-[10px] uppercase tracking-[0.3em] text-[#a89985] mb-8">05 . 04 . 2026</p>
-        <div class="space-y-1">
-            <p data-t="createdBy" class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
-            <p class="text-[2.5rem] font-signature signature-bold text-[#8c7355]">Narea</p>
-        </div>
+<div class="space-y-1">
+    <p data-t="createdBy" class="created-by-text text-[0.7rem] uppercase tracking-[0.3em] font-bold">
+        Created By
+    </p>
+    <p class="narea-text text-[2.5rem] font-signature signature-bold">
+        Narea
+    </p>
+</div>
     </footer>
 </section>    </main>
 
