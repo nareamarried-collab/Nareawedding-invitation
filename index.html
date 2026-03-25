@@ -253,22 +253,18 @@
         background-image: url('assets/foto/page-rsvp.jpeg');
     }
 
-footer::before {
-    content: "";
-    position: absolute;
-    top: -60px;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
-    z-index: 1;
+.bg-footer::before {
+    background-image: url('assets/foto/page-footer.jpeg');
+    background-position: center 90%;
+    background-size: cover;
+    filter: brightness(0.85) contrast(1.05);
 }
 
 .bg-footer::after {
     background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.65),
-        rgba(0,0,0,0.25)
+        to bottom,
+        rgba(242,238,233,0.25),
+        rgba(242,238,233,0.35)
     );
 }
 #wishes {
@@ -277,6 +273,9 @@ footer::before {
 
 footer {
     padding-top: 40px;
+}
+    footer h2 {
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
     .glass-card {
         background: rgba(255, 255, 255, 0.62);
@@ -796,32 +795,34 @@ style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(
             </div>
         </section>
 
-        <!-- WISHES LIST -->
-<section id="wishes" class="section-bg bg-footer py-16 text-center">
-    <div class="bg-[#fcfbf9] rounded-[2.5rem] p-8 shadow-sm border border-[#e5dfd3] reveal fade-up">
-        <h3 data-t="wishesTitle" class="text-3xl font-serif italic title-bold text-[#6b5841] mb-2">
-            Buku Tamu
-        </h3>
-        <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">
-            Doa & Ucapan Teman & Keluarga.
-        </p>
+<!-- WISHES + FOOTER WRAPPER -->
+<section class="section-bg bg-footer">
+    <!-- WISHES LIST -->
+    <div id="wishes" class="py-16 text-center">
+        <div class="bg-[#fcfbf9] rounded-[2.5rem] p-8 shadow-sm border border-[#e5dfd3] reveal fade-up max-w-md mx-auto">
+            <h3 data-t="wishesTitle" class="text-3xl font-serif italic title-bold text-[#6b5841] mb-2">
+                Buku Tamu
+            </h3>
+            <p data-t="wishesNote" class="text-[11px] text-[#8c7355] mb-8">
+                Doa & Ucapan Teman & Keluarga.
+            </p>
 
-        <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin">
-            <!-- Data wishes will appear here -->
+            <div id="wishes-list" class="text-left space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin">
+                <!-- Data wishes will appear here -->
+            </div>
         </div>
     </div>
-</section>
 
-        <!-- FOOTER -->
-        <footer class="section-bg bg-footer py-12 px-8 text-center border-t border-[#f2eee9]">
-            <h2 class="text-4xl font-signature text-[#6b5841] mb-1">Asya & Andre</h2>
-            <p class="text-[10px] uppercase tracking-[0.3em] text-[#a89985] mb-8">05 . 04 . 2026</p>
-            <div class="space-y-1">
-                <p data-t="createdBy" class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
-                <p class="text-[2.5rem] font-signature text-[#8c7355]">Narea</p>
-            </div>
-        </footer>
-    </main>
+    <!-- FOOTER -->
+    <footer class="py-12 px-8 text-center">
+        <h2 class="text-4xl font-signature signature-bold text-[#6b5841] mb-1">Asya & Andre</h2>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-[#a89985] mb-8">05 . 04 . 2026</p>
+        <div class="space-y-1">
+            <p data-t="createdBy" class="text-[0.7rem] uppercase tracking-[0.3em] text-[#a89985] font-bold">Created By</p>
+            <p class="text-[2.5rem] font-signature signature-bold text-[#8c7355]">Narea</p>
+        </div>
+    </footer>
+</section>    </main>
 
     <!-- TOAST -->
     <div id="toast">Berhasil!</div>
